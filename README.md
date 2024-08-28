@@ -12,6 +12,8 @@ pip install requirements.txt
 
 ## Running the Scripts  
 
+### To change the count of seconds for the car to run in each kinds of line and the turning time, refer to the libs.py
+
 ### To run the Nearest Neighbor Algorithm (NNA):  
 
 ```bash  
