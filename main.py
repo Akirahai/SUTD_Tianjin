@@ -57,7 +57,7 @@ def run_algorithms(vertices, board, initial_direction):
 def main():
     vtx_list = load_vertices('data/vertices.xlsx') 
     board = Board(obstacles_data)  
-    initial_dir = (1,0) # Initial Direction of the car on the board
+    initial_dir = (0,1) # Initial Direction of the car on the board
 
     # Run all 3 algorithms  
     results = run_algorithms(vtx_list, board, initial_dir)  

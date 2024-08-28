@@ -50,7 +50,7 @@ if __name__== "__main__":
     
     vtx_list = load_vertices('data/vertices.xlsx')
     board = Board(obstacles_data)  
-    initial_dir = (1,0) # Initial Direction of the car on the board 
+    initial_dir = (0,1) # Initial Direction of the car on the board 
     min_result = ex_min_possible_path(board, vtx_list, initial_dir)
     
     
