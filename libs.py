@@ -237,7 +237,8 @@ class Board:
                 
             turns_guidance.append('Move Straight')
             last_direction = current_direction
-            
+        
+        turns_guidance.append(f'Stop and flash light at {path[-1]}')
 
         return turns, turns_guidance, last_direction
     
