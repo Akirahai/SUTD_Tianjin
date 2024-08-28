@@ -1,42 +1,6 @@
 from libs import *
 
 
-
-
-
-
-# Function to analyze a full_paths going through 5 points
-def analysis_full_optimized_paths(board,full_path, dir):
-    checked_dir = dir
-    full_guidance = {}
-    full_guided_path = {}
-    path_names = [v.getName() for v in full_path] 
-    total_distance = 0
-    
-    
-    for i in range(len(full_path)- 1):
-        start_vtx = full_path[i]  
-        end_vtx = full_path[i + 1]
-        
-        guided_path, distance, turn_guidance, last_direction = board.find_optimized_paths(checked_dir, start_vtx, end_vtx)
-        
-        total_distance += distance
-        
-        full_guidance[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = turn_guidance
-
-        full_guided_path[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = guided_path
-        
-        checked_dir = last_direction
-        
-        
-    result_entry = {  
-        'Path': path_names,  
-        'Total_Distance': total_distance,  
-        'Guidance': full_guidance,
-        'Guided_Path': full_guided_path
-    }
-    
-    return result_entry
     
 # Exhaustive Search all possible paths, store in results 
 def all_possible_paths(board, vtx_list, initial_dir):  
@@ -64,7 +28,7 @@ def all_possible_paths(board, vtx_list, initial_dir):
     return results  
 
 # Compare them with total_distance value, return the minimum one
-def min_possible_path(board, vtx_list, initial_dir):
+def ex_min_possible_path(board, vtx_list, initial_dir):
     
     all_paths_results = all_possible_paths(board, vtx_list, initial_dir)
     
@@ -84,47 +48,17 @@ def min_possible_path(board, vtx_list, initial_dir):
 
 if __name__== "__main__":
     
-    df_vtx = pd.read_excel('data/vertices.xlsx')
-    vtx_list = []
-    # Create the list from the excel filde and stor it as list of objects
-    for i in range(len(df_vtx)):
-        vtx = Vtx(df_vtx['Ver_Name'][i], df_vtx['x'][i], df_vtx['y'][i])
-        vtx_list.append(vtx)
-    
-    
+    vtx_list = load_vertices('data/vertices.xlsx')
     board = Board(obstacles_data)  
-    initial_dir = (1,0)  
-    min_result = min_possible_path(board, vtx_list, initial_dir)
+    initial_dir = (1,0) # Initial Direction of the car on the board 
+    min_result = ex_min_possible_path(board, vtx_list, initial_dir)
     
-    # print('The optimal path given by the exhaustive search algorithm is')
-    # print(f"Path : {min_result['Path']}")  
-    # print(f"  Total Distance: {min_result['Total_Distance']}")  
-    # print(f"  Guidance:")  
-    # for guidance in min_result['Guidance']:  
-    #     print(f"    - {guidance}")  
-    # print(f"  Guided_Path:")
-    # for guidance in min_result['Guided_Path']:
-    #     print(f"    - {guidance}")
-    # print()
     
+    
+# Save all the results into folder
     output_dir = 'output/Exhaustive Search'
     
     os.makedirs(output_dir, exist_ok=True)
-    
-    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_ex.txt"  
-    
-    with open(output_file, 'w') as file:  
-        file.write('The optimal path given by the exhaustive search algorithm is\n')  
-        file.write(f"Path : {min_result['Path']}\n")  
-        file.write(f"  Total Distance: {min_result['Total_Distance']}\n")  
-        file.write(f"  Guidance:\n")  
-        for guidance in min_result['Guidance']:  
-            file.write(f"    - {guidance}\n")  
-        file.write(f"  Guided_Path:\n")  
-        for guidance in min_result['Guided_Path']:  
-            file.write(f"    - {guidance}\n")  
-    
-    print(f"Results saved to {output_file}")  
     
     
     # Save as Json file
@@ -151,11 +85,11 @@ if __name__== "__main__":
     combined_actions = []  
     guidance = min_result['Guidance']  
 
-    # Iterate through the Guidance structure and collect actions  
-    for key in guidance:  
-        combined_actions.extend(guidance[key])  # Add all actions for each segment  
 
-    # Prepare data for JSON  
+    for key in guidance:  
+        combined_actions.extend(guidance[key])
+
+
     output_data = {  
         'Optimal Path': {  
             'Path': min_result['Path'],  

@@ -301,19 +301,6 @@ class Board:
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 class Edge:
     def __init__(self, x1, y1, x2, y2):
         # Initialize the coordinates of the edge - the edge connects (x1, y1) and (x2, y2)
@@ -370,4 +357,44 @@ class Obs:
 
 
 
+# Function to analyze a full_paths going through points
+def analysis_full_optimized_paths(board,full_path, dir):
+    checked_dir = dir
+    full_guidance = {}
+    full_guided_path = {}
+    path_names = [v.getName() for v in full_path] 
+    total_distance = 0
+    
+    
+    for i in range(len(full_path)- 1):
+        start_vtx = full_path[i]  
+        end_vtx = full_path[i + 1]
+        
+        guided_path, distance, turn_guidance, last_direction = board.find_optimized_paths(checked_dir, start_vtx, end_vtx)
+        
+        total_distance += distance
+        
+        full_guidance[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = turn_guidance
 
+        full_guided_path[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = guided_path
+        
+        checked_dir = last_direction
+        
+        
+    result_entry = {  
+        'Path': path_names,  
+        'Total_Distance': total_distance,  
+        'Guidance': full_guidance,
+        'Guided_Path': full_guided_path
+    }
+    
+    return result_entry
+
+# Code to load the vertices from an excel file
+def load_vertices(file_path):  
+    df_vtx = pd.read_excel(file_path)  
+    vtx_list = []  
+    for i in range(len(df_vtx)):  
+        vtx = Vtx(df_vtx['Ver_Name'][i], df_vtx['x'][i], df_vtx['y'][i])  
+        vtx_list.append(vtx)  
+    return vtx_list 

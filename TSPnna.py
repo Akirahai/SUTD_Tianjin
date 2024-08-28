@@ -62,7 +62,7 @@ def nearest_neighbor_path(board, vtx_list, initial_dir):
             
             visited[vtx_list.index(nearest_vertex)] = True  
             
-            print(f' Found the nearest vertex next to {current_vertex} is {nearest_vertex}')
+            # print(f' Found the nearest vertex next to {current_vertex} is {nearest_vertex}')
             
             current_vertex = nearest_vertex  
             checked_dir = last_direction
@@ -96,40 +96,18 @@ def nearest_neighbor_path(board, vtx_list, initial_dir):
 
 # Example usage  
 if __name__== "__main__":  
-    
-    df_vtx = pd.read_excel('data/vertices.xlsx')  
-    vtx_list = []  
-    # Create the list from the excel file and store it as a list of objects  
-    for i in range(len(df_vtx)):  
-        vtx = Vtx(df_vtx['Ver_Name'][i], df_vtx['x'][i], df_vtx['y'][i])  
-        vtx_list.append(vtx)  
 
-
-
-
+    vtx_list = load_vertices('data/vertices.xlsx')
     board = Board(obstacles_data)  
-    initial_dir = (0,1)  
+    initial_dir = (1,0) # Initial Direction of the car on the board
     min_result = nearest_neighbor_path(board, vtx_list, initial_dir)  
 
+
+
+# Save all the results into folder
     output_dir = 'output/Nearest Neighbourhood'
     
     os.makedirs(output_dir, exist_ok=True)
-    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_nna.txt"  
-    
-    
-    # Open the file and write the results  
-    with open(output_file, 'w') as file:  
-        file.write('The optimal path given by the nearest neighbor algorithm is\n')  
-        file.write(f"Path : {min_result['Path']}\n")  
-        file.write(f"  Total Distance: {min_result['Total_Distance']}\n")  
-        file.write(f"  Guidance:\n")  
-        for guidance in min_result['Guidance']:  
-            file.write(f"    - {guidance}\n")  
-        file.write(f"  Guided_Path:\n")  
-        for guidance in min_result['Guided_Path']:  
-            file.write(f"    - {guidance}\n")  
-    
-    print(f"Results saved to {output_file}")  
     
     
     # Save as Json file
@@ -156,11 +134,11 @@ if __name__== "__main__":
     combined_actions = []  
     guidance = min_result['Guidance']  
 
-    # Iterate through the Guidance structure and collect actions  
-    for key in guidance:  
-        combined_actions.extend(guidance[key])  # Add all actions for each segment  
 
-    # Prepare data for JSON  
+    for key in guidance:  
+        combined_actions.extend(guidance[key]) 
+
+
     output_data = {  
         'Optimal Path': {  
             'Path': min_result['Path'],  
