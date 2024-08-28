@@ -26,8 +26,8 @@ def nearest_neighbor_path(board, vtx_list, initial_dir):
 
     total_distance = 0  
     checked_dir = initial_dir  
-    full_guidance = []  
-    full_guided_path = [] 
+    full_guidance = {}
+    full_guided_path = {}
 
 
 
@@ -53,11 +53,10 @@ def nearest_neighbor_path(board, vtx_list, initial_dir):
             guided_path, nearest_distance, turn_guidance, last_direction = board.find_optimized_paths(checked_dir, current_vertex, nearest_vertex)
             
             total_distance += nearest_distance
-            
-            # Get guidance and guided guided_path for the move  
-            full_guidance.append(f"From {current_vertex.getName()} to {nearest_vertex.getName()}: {turn_guidance}")
+        
+            full_guidance[f'From {current_vertex.getName()} to {nearest_vertex.getName()}'] = turn_guidance
 
-            full_guided_path.append(f'From {current_vertex.getName()} to {nearest_vertex.getName()}: {guided_path}')
+            full_guided_path[f'From {current_vertex.getName()} to {nearest_vertex.getName()}'] = guided_path
 
             full_path.append(nearest_vertex)  
             
@@ -75,12 +74,12 @@ def nearest_neighbor_path(board, vtx_list, initial_dir):
     
     total_distance += distance_to_start  
     
-    full_guidance.append(f"From {current_vertex.getName()} to {start_vertex.getName()}: {turn_guidance}")
-        
-    full_guided_path.append(f'From {current_vertex.getName()} to {start_vertex.getName()}: {guided_path}')
+    full_guidance[f'From {current_vertex.getName()} to {nearest_vertex.getName()}'] = turn_guidance
+
+    full_guided_path[f'From {current_vertex.getName()} to {nearest_vertex.getName()}'] = guided_path
     
     
-    full_path.append(start_vertex)  # Close the loop by going back to the start  
+    full_path.append(start_vertex) 
 
     
     path_names = [v.getName() for v in full_path]
@@ -109,16 +108,71 @@ if __name__== "__main__":
 
 
     board = Board(obstacles_data)  
-    initial_dir = (1, 0)  
+    initial_dir = (0,1)  
     min_result = nearest_neighbor_path(board, vtx_list, initial_dir)  
 
-    print('The optimal guided_path given by the nearest neighbor algorithm is')  
-    print(f"Path : {min_result['Path']}")  
-    print(f"  Total Distance: {min_result['Total_Distance']}")  
-    print(f"  Guidance:")  
-    for guidance in min_result['Guidance']:  
-        print(f"    - {guidance}")  
-    print(f"  Guided_Path:")  
-    for guidance in min_result['Guided_Path']:  
-        print(f"    - {guidance}")  
-    print()
+    
+    
+    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.txt"  
+    os.makedirs(output_file, exist_ok=True)
+    
+    
+    # Open the file and write the results  
+    with open(output_file, 'w') as file:  
+        file.write('The optimal path given by the nearest neighbor algorithm is\n')  
+        file.write(f"Path : {min_result['Path']}\n")  
+        file.write(f"  Total Distance: {min_result['Total_Distance']}\n")  
+        file.write(f"  Guidance:\n")  
+        for guidance in min_result['Guidance']:  
+            file.write(f"    - {guidance}\n")  
+        file.write(f"  Guided_Path:\n")  
+        for guidance in min_result['Guided_Path']:  
+            file.write(f"    - {guidance}\n")  
+    
+    print(f"Results saved to {output_file}")  
+    
+    
+    # Save as Json file
+    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.json"  
+    os.makedirs(output_file, exist_ok=True)
+
+    output_data = {  
+        'Optimal Path': {  
+            'Path': min_result['Path'],  
+            'Total Distance': min_result['Total_Distance'],  
+            'Guidance': min_result['Guidance'],  
+            'Guided Path': min_result['Guided_Path']  
+        }  
+    }  
+    
+    with open(output_file, 'w') as json_file:  
+        json.dump(output_data, json_file, indent=4)  
+
+    print(f"Results saved to {output_file}")  
+    
+
+    # Save the combined guidance
+    output_file = f"output/Nearest Neighbourhood/optimal_guidance_{initial_dir}_nna.json"  
+    os.makedirs(output_file, exist_ok=True)
+    
+    combined_actions = []  
+    guidance = min_result['Guidance']  
+
+    # Iterate through the Guidance structure and collect actions  
+    for key in guidance:  
+        combined_actions.extend(guidance[key])  # Add all actions for each segment  
+
+    # Prepare data for JSON  
+    output_data = {  
+        'Optimal Path': {  
+            'Path': min_result['Path'],  
+            'Total Distance': min_result['Total_Distance'],  
+            'Combined Actions': combined_actions  # Final combined actions  
+        }  
+    }  
+    
+    # Write to a JSON file  
+    with open(output_file, 'w') as json_file:  
+        json.dump(output_data, json_file, indent=4)  # indent for pretty printing  
+
+    print(f"Results saved to {output_file}")

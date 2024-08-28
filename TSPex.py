@@ -96,13 +96,75 @@ if __name__== "__main__":
     initial_dir = (1,0)  
     min_result = min_possible_path(board, vtx_list, initial_dir)
     
-    print('The optimal path given by the exhaustive search algorithm is')
-    print(f"Path : {min_result['Path']}")  
-    print(f"  Total Distance: {min_result['Total_Distance']}")  
-    print(f"  Guidance:")  
-    for guidance in min_result['Guidance']:  
-        print(f"    - {guidance}")  
-    print(f"  Guided_Path:")
-    for guidance in min_result['Guided_Path']:
-        print(f"    - {guidance}")
-    print()
+    # print('The optimal path given by the exhaustive search algorithm is')
+    # print(f"Path : {min_result['Path']}")  
+    # print(f"  Total Distance: {min_result['Total_Distance']}")  
+    # print(f"  Guidance:")  
+    # for guidance in min_result['Guidance']:  
+    #     print(f"    - {guidance}")  
+    # print(f"  Guided_Path:")
+    # for guidance in min_result['Guided_Path']:
+    #     print(f"    - {guidance}")
+    # print()
+    
+    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_15_ex.txt"  
+    os.makedirs(output_file, exist_ok=True)
+    
+    with open(output_file, 'w') as file:  
+        file.write('The optimal path given by the exhaustive search algorithm is\n')  
+        file.write(f"Path : {min_result['Path']}\n")  
+        file.write(f"  Total Distance: {min_result['Total_Distance']}\n")  
+        file.write(f"  Guidance:\n")  
+        for guidance in min_result['Guidance']:  
+            file.write(f"    - {guidance}\n")  
+        file.write(f"  Guided_Path:\n")  
+        for guidance in min_result['Guided_Path']:  
+            file.write(f"    - {guidance}\n")  
+    
+    print(f"Results saved to {output_file}")  
+    
+    
+    # Save as Json file
+    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_15_ex.json"  
+    os.makedirs(output_file, exist_ok=True)
+    
+    output_data = {  
+        'Optimal Path': {  
+            'Path': min_result['Path'],  
+            'Total Distance': min_result['Total_Distance'],  
+            'Guidance': min_result['Guidance'],  
+            'Guided Path': min_result['Guided_Path']  
+        }  
+    }  
+    
+    with open(output_file, 'w') as json_file:  
+        json.dump(output_data, json_file, indent=4)  
+
+    print(f"Results saved to {output_file}")  
+    
+
+    # Save the combined guidance
+    output_file = f"output/Exhaustive Search/optimal_guidance_{initial_dir}_ex.json"  
+    os.makedirs(output_file, exist_ok=True)
+    
+    combined_actions = []  
+    guidance = min_result['Guidance']  
+
+    # Iterate through the Guidance structure and collect actions  
+    for key in guidance:  
+        combined_actions.extend(guidance[key])  # Add all actions for each segment  
+
+    # Prepare data for JSON  
+    output_data = {  
+        'Optimal Path': {  
+            'Path': min_result['Path'],  
+            'Total Distance': min_result['Total_Distance'],  
+            'Combined Actions': combined_actions  # Final combined actions  
+        }  
+    }  
+    
+    # Write to a JSON file  
+    with open(output_file, 'w') as json_file:  
+        json.dump(output_data, json_file, indent=4)  # indent for pretty printing  
+
+    print(f"Results saved to {output_file}")

@@ -1,12 +1,10 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from tabulate import tabulate
-import datetime
-import pyperclip
 import itertools
 
+import json
 from itertools import permutations  
+import os
 
 # Constants for time costs  
 t_0 = 2  # Time for a normal path  
