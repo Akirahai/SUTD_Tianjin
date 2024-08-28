@@ -238,7 +238,6 @@ class Board:
             turns_guidance.append('Move Straight')
             last_direction = current_direction
             
-        turns_guidance.append(f'Turn Around at the point {path[-1]}')
 
         return turns, turns_guidance, last_direction
     
