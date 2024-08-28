@@ -16,6 +16,17 @@ t_N = float('inf')  # Time for no path (infinity)
 t_lr = 2  # Additional time when turning left or right 
 
 
+obstacles_data = [  
+    (1, 0, 2, 0, "T"),  
+    (3, 0, 4, 0, "T"),  
+    (2, 1, 3, 1, "T"),  
+    (1, 1, 1, 2, "N"),  
+    (1, 2, 2, 2, "N"),  
+    (4, 4, 5, 4, "B"),  
+    (5, 4, 5, 5, "B")  
+]  
+
+
 
 class Vtx_normal(object):  
     def __init__(self, name, x, y):  
@@ -201,33 +212,35 @@ class Board:
             current_direction = (dx, dy)  
 
             # Count turns  
-            if last_direction == current_direction:
-                turns_guidance.append('Move Straight')
-                
-            elif (current_direction[0] + last_direction[0] == 0) and (current_direction[1] + last_direction[1] == 0):  
-                turns += 2  
-                turns_guidance.append('U - Turn')  
-            else:  
-                # To determine the type of turn  
-                if last_direction == (0, 1) and current_direction == (1, 0):  
-                    turns += 1  # Right Turn  
-                    turns_guidance.append('Right Turn')  
-                elif last_direction == (1, 0) and current_direction == (0, -1):  
-                    turns += 1  # Right Turn  
-                    turns_guidance.append('Right Turn')  
-                elif last_direction == (0, -1) and current_direction == (-1, 0):  
-                    turns += 1  # Right Turn  
-                    turns_guidance.append('Right Turn')  
-                elif last_direction == (-1, 0) and current_direction == (0, 1):  
-                    turns += 1  # Right Turn  
-                    turns_guidance.append('Right Turn')  
+            
+            
+            if last_direction != current_direction:
+                if (current_direction[0] + last_direction[0] == 0) and (current_direction[1] + last_direction[1] == 0):  
+                    turns += 2  
+                    turns_guidance.append('U - Turn')  
                 else:  
-                    # Otherwise, it's a left turn  
-                    turns += 1  # Left Turn  
-                    turns_guidance.append('Left Turn')
+                    # To determine the type of turn  
+                    if last_direction == (0, 1) and current_direction == (1, 0):  
+                        turns += 1  # Right Turn  
+                        turns_guidance.append('Turn Right')  
+                    elif last_direction == (1, 0) and current_direction == (0, -1):  
+                        turns += 1  # Right Turn  
+                        turns_guidance.append('Turn Right')  
+                    elif last_direction == (0, -1) and current_direction == (-1, 0):  
+                        turns += 1  # Right Turn  
+                        turns_guidance.append('Turn Right')  
+                    elif last_direction == (-1, 0) and current_direction == (0, 1):  
+                        turns += 1  # Right Turn  
+                        turns_guidance.append('Turn Right')  
+                    else:  
+                        # Otherwise, it's a left turn  
+                        turns += 1  # Left Turn  
+                        turns_guidance.append('Turn Left')
                 
-                last_direction = current_direction
-                
+            turns_guidance.append('Move Straight')
+            last_direction = current_direction
+            
+        turns_guidance.append(f'Turn Around at the point {path[-1]}')
 
         return turns, turns_guidance, last_direction
     
