@@ -6,12 +6,16 @@ import datetime
 import pyperclip
 import itertools
 
+from itertools import permutations  
+
 # Constants for time costs  
 t_0 = 2  # Time for a normal path  
 t_B = 10  # Time for a broken path  
 t_T = 6 # Time for a thin path  
 t_N = float('inf')  # Time for no path (infinity)  
 t_lr = 2  # Additional time when turning left or right 
+
+
 
 class Vtx_normal(object):  
     def __init__(self, name, x, y):  
@@ -137,6 +141,7 @@ class Board:
         return all_paths  
 
     # Checking all the paths, delete unnecessary paths
+    
     def dfs(self, current, end, path, all_paths, total_steps, current_steps, visited):  
         # Add the current vertex to the path  
         path.append((current.x, current.y))  
@@ -255,8 +260,12 @@ class Board:
         return total_time, turns_guidance, last_direction
     
     
-    def find_optimized_paths(self, initial_direction,start_point, end_point, number_of_paths):
+    def find_optimized_paths(self, initial_direction,start_point, end_point, number_of_paths = 0):
         
+        number_of_paths = start_point.optimized_paths(end_point)
+        
+        start_point = start_point.getName()
+        end_point = end_point.getName()
         
         all_paths = self.find_paths(start_point, end_point, number_of_paths)
         
