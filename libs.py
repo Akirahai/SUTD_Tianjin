@@ -7,11 +7,11 @@ from itertools import permutations
 import os
 
 # Constants for time costs  
-t_0 = 2  # Time for a normal path  
-t_B = 10  # Time for a broken path  
-t_T = 6 # Time for a thin path  
+t_0 = 0.575  # Time for a normal path  
+t_B = 0.575  # Time for a broken path  
+t_T = 0.575 # Time for a thin path  
 t_N = float('inf')  # Time for no path (infinity)  
-t_lr = 2  # Additional time when turning left or right 
+t_lr = 0.310  # Additional time when turning left or right 
 
 
 obstacles_data = [  

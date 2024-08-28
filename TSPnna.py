@@ -114,7 +114,7 @@ if __name__== "__main__":
     output_dir = 'output/Nearest Neighbourhood'
     
     os.makedirs(output_dir, exist_ok=True)
-    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.txt"  
+    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_nna.txt"  
     
     
     # Open the file and write the results  
@@ -133,7 +133,7 @@ if __name__== "__main__":
     
     
     # Save as Json file
-    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.json"  
+    output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_nna.json"  
 
     output_data = {  
         'Optimal Path': {  

@@ -8,8 +8,8 @@ from libs import *
 # Function to analyze a full_paths going through 5 points
 def analysis_full_optimized_paths(board,full_path, dir):
     checked_dir = dir
-    full_guidance = []
-    full_guided_path = []
+    full_guidance = {}
+    full_guided_path = {}
     path_names = [v.getName() for v in full_path] 
     total_distance = 0
     
@@ -22,9 +22,9 @@ def analysis_full_optimized_paths(board,full_path, dir):
         
         total_distance += distance
         
-        full_guidance.append(f"From {start_vtx.getName()} to {end_vtx.getName()}: {turn_guidance}")
-        
-        full_guided_path.append(f'From {start_vtx.getName()} to {end_vtx.getName()}: {guided_path}')
+        full_guidance[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = turn_guidance
+
+        full_guided_path[f'From {start_vtx.getName()} to {end_vtx.getName()}'] = guided_path
         
         checked_dir = last_direction
         
@@ -107,8 +107,11 @@ if __name__== "__main__":
     #     print(f"    - {guidance}")
     # print()
     
-    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_15_ex.txt"  
-    os.makedirs(output_file, exist_ok=True)
+    output_dir = 'output/Exhaustive Search'
+    
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_ex.txt"  
     
     with open(output_file, 'w') as file:  
         file.write('The optimal path given by the exhaustive search algorithm is\n')  
@@ -125,8 +128,7 @@ if __name__== "__main__":
     
     
     # Save as Json file
-    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_15_ex.json"  
-    os.makedirs(output_file, exist_ok=True)
+    output_file = f"output/Exhaustive Search/optimal_path_{initial_dir}_ex.json"  
     
     output_data = {  
         'Optimal Path': {  
@@ -145,7 +147,6 @@ if __name__== "__main__":
 
     # Save the combined guidance
     output_file = f"output/Exhaustive Search/optimal_guidance_{initial_dir}_ex.json"  
-    os.makedirs(output_file, exist_ok=True)
     
     combined_actions = []  
     guidance = min_result['Guidance']  
