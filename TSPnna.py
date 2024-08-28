@@ -111,10 +111,10 @@ if __name__== "__main__":
     initial_dir = (0,1)  
     min_result = nearest_neighbor_path(board, vtx_list, initial_dir)  
 
+    output_dir = 'output/Nearest Neighbourhood'
     
-    
+    os.makedirs(output_dir, exist_ok=True)
     output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.txt"  
-    os.makedirs(output_file, exist_ok=True)
     
     
     # Open the file and write the results  
@@ -134,7 +134,6 @@ if __name__== "__main__":
     
     # Save as Json file
     output_file = f"output/Nearest Neighbourhood/optimal_path_{initial_dir}_15_nna.json"  
-    os.makedirs(output_file, exist_ok=True)
 
     output_data = {  
         'Optimal Path': {  
@@ -153,7 +152,6 @@ if __name__== "__main__":
 
     # Save the combined guidance
     output_file = f"output/Nearest Neighbourhood/optimal_guidance_{initial_dir}_nna.json"  
-    os.makedirs(output_file, exist_ok=True)
     
     combined_actions = []  
     guidance = min_result['Guidance']  
